@@ -1,0 +1,3 @@
+(fp_lib_table
+  (lib (name Wordclock)(type KiCad)(uri ${KIPRJMOD}/Wordclock)(options "")(descr ""))
+)
