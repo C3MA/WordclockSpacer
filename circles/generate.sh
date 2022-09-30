@@ -2,11 +2,15 @@
 FILE=WordclockSpacer.ngc
 colDist=28 # millimeter
 rowDist=31 # millimeter
-radius=11 # millimeter
+
+targetRadius=12 # millimeter
+
 frameHeight=500 # 50 centimeter
 
+# Z parameter
 travelheight=3
-depth=2
+depth=1
+repeate=11
 
 echo -n "Offset in millimeter on left side:"
 read dtgSide
@@ -14,8 +18,16 @@ echo ""
 echo -n "Offset in millimeter on bottom side:"
 read dtgBottom
 echo ""
+echo -n "Tool diameter:"
+read drillDiameter
+echo ""
 
-echo "G21    ; Metrische" > $FILE
+echo "; Generated with generate.sh $date" > $FILE
+echo "; Parameter:" >> $FILE
+echo "; side: $dtgSide mm" >> $FILE
+echo "; bottom: $dtgBottom mm" >> $FILE
+echo "; drill diameter: $drillDiameter mm" >> $FILE
+echo "G21    ; Metrische" >> $FILE
 echo "G90     ( Absolute coordinates.        )" >> $FILE
 echo "S600  ( RPM spindle speed.           )" >> $FILE
 echo "M3      ( Spindle on clockwise.        )" >> $FILE
@@ -24,8 +36,9 @@ echo "G64 P0.00500 ( set maximum deviation from commanded toolpath )" >> $FILE
 echo "G92.1    ; cancel offset coordinate system and set values to zero" >> $FILE
 echo "G00 Z30" >> $FILE
 echo "F1800     ; 1800mm/minutes movement speed" >> $FILE
-echo "F300     ; 300mm/minutes movement speed" >> $FILE
+echo "F200     ; 200mm/minutes movement speed" >> $FILE
 
+radius=$(expr $targetRadius \- $drillDiameter )
 offsetSide=$(expr $radius \-  $dtgSide )
 offsetBottom=$(expr $radius \- $dtgBottom )
 workDepth=$(expr $travelheight \+ $depth )
@@ -40,13 +53,18 @@ do
    end1=$(expr $currentX \- $radius)
    echo "M3      ( Spindle on clockwise.        )" >> $FILE
    echo "G00 X$end1 Y$currentY" >> $FILE
-   echo "G00 Z-$travelheight" >> $FILE
-   echo "G01 Z-$workDepth" >> $FILE
+   echo "G00 Z$travelheight" >> $FILE
+   for z in $( seq 0 $repeate )
+   do
+   currentDepth=$(expr $z \* $depth )
+   echo "G01 Z-$currentDepth" >> $FILE
    end2=$(expr $currentX \+ $radius)
    echo "G02 X$end2 Y$currentY R$radius" >> $FILE
    echo "G02 X$end1 Y$currentY R$radius" >> $FILE
    echo "G00 Z$travelheight" >> $FILE
+   done
    echo "T1" >> $FILE
+   echo "M0 (Temporary machine stop)" >> $FILE
    echo "M5 (Spindle stop. )" >> $FILE
  done
 done
