@@ -21,7 +21,7 @@ echo "G64 P0.00500 ( set maximum deviation from commanded toolpath )" >> $FILE
 echo "G92.1    ; cancel offset coordinate system and set values to zero" >> $FILE
 echo "G00 Z30" >> $FILE
 echo "F1800     ; 1800mm/minutes movement speed" >> $FILE
-echo ";F300     ; 300mm/minutes movement speed" >> $FILE
+echo "F300     ; 300mm/minutes movement speed" >> $FILE
 
 offsetSide=$(expr \( 28 \/ 2 \) \- $dtgSide )
 
