@@ -5,6 +5,9 @@ rowDist=31 # millimeter
 radius=11 # millimeter
 frameHeight=500 # 50 centimeter
 
+travelheight=3
+depth=2
+
 echo -n "Offset in millimeter on left side:"
 read dtgSide
 echo ""
@@ -25,7 +28,7 @@ echo "F300     ; 300mm/minutes movement speed" >> $FILE
 
 offsetSide=$(expr $radius \-  $dtgSide )
 offsetBottom=$(expr $radius \- $dtgBottom )
-
+workDepth=$(expr $travelheight \+ $depth )
 for y in {0..9}
 do
  for x in {0..10}
@@ -35,10 +38,16 @@ do
    currentX=$(expr $x \* $colDist \+ $offsetSide)
    # (this line gives the machine a start point)
    end1=$(expr $currentX \- $radius)
+   echo "M3      ( Spindle on clockwise.        )" >> $FILE
    echo "G00 X$end1 Y$currentY" >> $FILE
+   echo "G00 Z-$travelheight" >> $FILE
+   echo "G01 Z-$workDepth" >> $FILE
    end2=$(expr $currentX \+ $radius)
    echo "G02 X$end2 Y$currentY R$radius" >> $FILE
    echo "G02 X$end1 Y$currentY R$radius" >> $FILE
+   echo "G00 Z$travelheight" >> $FILE
+   echo "T1" >> $FILE
+   echo "M5 (Spindle stop. )" >> $FILE
  done
 done
 echo "G00 Z30" >> $FILE
