@@ -23,16 +23,15 @@ echo "G00 Z30" >> $FILE
 echo "F1800     ; 1800mm/minutes movement speed" >> $FILE
 echo "F300     ; 300mm/minutes movement speed" >> $FILE
 
-offsetSide=$(expr \( 28 \/ 2 \) \- $dtgSide )
+offsetSide=$(expr $radius \-  $dtgSide )
+offsetBottom=$(expr $radius \- $dtgBottom )
 
-#for y in {0..9}
-# Debug (only two lines are generated)
-for y in {0..1}
+for y in {0..9}
 do
  for x in {0..10}
  do
    echo "; $x-$y" | tee -a $FILE
-   currentY=$(expr $y \* $rowDist )
+   currentY=$(expr $y \* $rowDist \+ $offsetBottom )
    currentX=$(expr $x \* $colDist \+ $offsetSide)
    # (this line gives the machine a start point)
    end1=$(expr $currentX \- $radius)
