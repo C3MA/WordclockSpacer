@@ -38,6 +38,8 @@ echo "G00 Z30" >> $FILE
 echo "F1800     ; 1800mm/minutes movement speed" >> $FILE
 echo "F200     ; 200mm/minutes movement speed" >> $FILE
 
+echo "Start generation..."
+
 radius=$(expr $targetRadius \- $drillDiameter )
 offsetSide=$(expr $radius \-  $dtgSide )
 offsetBottom=$(expr $radius \- $dtgBottom )
@@ -46,7 +48,7 @@ for y in {0..9}
 do
  for x in {0..10}
  do
-   echo "; $x-$y" | tee -a $FILE
+   echo "; $x-$y" >> $FILE
    currentY=$(expr $y \* $rowDist \+ $offsetBottom )
    currentX=$(expr $x \* $colDist \+ $offsetSide)
    # (this line gives the machine a start point)
@@ -70,4 +72,9 @@ do
 done
 echo "G00 Z30" >> $FILE
 echo "M2 ( Program end. )" >> $FILE
+
+# 10 Zeilen brauchen
+rowHeight=$(expr 10 \* $rowDist \+ $offsetBottom )
+offsetStart=$(expr \( $frameHeight \- $rowHeight \) \/ 2 )
+echo "Move to $offsetStart mm"
 
