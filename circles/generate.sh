@@ -35,7 +35,6 @@ echo "M3      ( Spindle on clockwise.        )" >> $FILE
 echo "G64 P0.00500 ( set maximum deviation from commanded toolpath )" >> $FILE
 echo "G92.1    ; cancel offset coordinate system and set values to zero" >> $FILE
 echo "G00 Z30" >> $FILE
-echo "F1800     ; 1800mm/minutes movement speed" >> $FILE
 echo "F200     ; 200mm/minutes movement speed" >> $FILE
 
 echo "Start generation..."
@@ -63,10 +62,9 @@ do
    end2=$(expr $currentX \+ $radius)
    echo "G02 X$end2 Y$currentY R$radius" >> $FILE
    echo "G02 X$end1 Y$currentY R$radius" >> $FILE
-   echo "G00 Z$travelheight" >> $FILE
    done
+   echo "G00 Z$travelheight" >> $FILE
    echo "T1" >> $FILE
-   echo "M0 (Temporary machine stop)" >> $FILE
    echo "M5 (Spindle stop. )" >> $FILE
  done
 done
@@ -74,7 +72,8 @@ echo "G00 Z30" >> $FILE
 echo "M2 ( Program end. )" >> $FILE
 
 # 10 Zeilen brauchen
-rowHeight=$(expr 10 \* $rowDist \+ $offsetBottom )
+rowHeight=$(expr 9 \* $rowDist \+ $offsetBottom \+ $radius )
+echo "Cicles use $rowHeight mm"
 offsetStart=$(expr \( $frameHeight \- $rowHeight \) \/ 2 )
 echo "Move to $offsetStart mm"
 
