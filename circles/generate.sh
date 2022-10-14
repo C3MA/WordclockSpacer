@@ -9,8 +9,8 @@ frameHeight=500 # 50 centimeter
 
 # Z parameter
 travelheight=3
-depth=2
-repeate=6
+depth=1
+repeate=11
 
 echo -n "Offset in millimeter on left side:"
 read dtgSide
