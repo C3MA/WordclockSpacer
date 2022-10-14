@@ -35,7 +35,7 @@ echo "M3      ( Spindle on clockwise.        )" >> $FILE
 echo "G64 P0.00500 ( set maximum deviation from commanded toolpath )" >> $FILE
 echo "G92.1    ; cancel offset coordinate system and set values to zero" >> $FILE
 echo "G00 Z30" >> $FILE
-echo "F200     ; 200mm/minutes movement speed" >> $FILE
+echo "F600     ; 600mm/minutes movement speed" >> $FILE
 
 echo "Start generation..."
 
