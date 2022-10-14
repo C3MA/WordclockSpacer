@@ -3,14 +3,14 @@ FILE=WordclockSpacer.ngc
 colDist=28 # millimeter
 rowDist=31 # millimeter
 
-targetRadius=12 # millimeter
+targetRadius=14 # millimeter
 
 frameHeight=500 # 50 centimeter
 
 # Z parameter
 travelheight=3
-depth=1
-repeate=11
+depth=2
+repeate=6
 
 echo -n "Offset in millimeter on left side:"
 read dtgSide
